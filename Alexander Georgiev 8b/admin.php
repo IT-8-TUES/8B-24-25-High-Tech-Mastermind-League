@@ -2,18 +2,15 @@
 require_once 'session_config.php';
 require_once 'config.php';
 
-// Check if user is logged in and is an admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['player_rank'] !== 'Admin') {
     header("Location: index.php");
     exit;
 }
 
-// Get user info
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 $player_rank = $_SESSION['player_rank'];
 
-// Get stats
 $stats = [
     'users' => $conn->query("SELECT COUNT(*) as count FROM users")->fetch_assoc()['count'],
     'challenges' => $conn->query("SELECT COUNT(*) as count FROM challenges")->fetch_assoc()['count'],
@@ -25,7 +22,6 @@ $stats = [
     'pending_redemptions' => $conn->query("SELECT COUNT(*) as count FROM redemptions WHERE status = 'pending'")->fetch_assoc()['count']
 ];
 
-// Get recent activity
 $recent_activity_query = "
     (SELECT 'submission' as type, s.id, s.created_at, u.username, c.title as item_name, s.status
      FROM submissions s
