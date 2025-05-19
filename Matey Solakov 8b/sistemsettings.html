@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Challenge Generator - System Settings</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="settings-container">
+    <div class="settings-header">
+      <h1>System Settings</h1>
+      <div class="system-status online">AI System Online</div>
+    </div>
+    
+    <div class="settings-nav">
+      <div class="nav-item active" data-tab="ai-settings">AI Engine</div>
+      <div class="nav-item" data-tab="challenge-gen">Challenge Generator</div>
+      <div class="nav-item" data-tab="performance">Performance</div>
+      <div class="nav-item" data-tab="data">Data Management</div>
+      <div class="nav-item" data-tab="advanced">Advanced</div>
+    </div>
+    
+    <div class="settings-content">
+      <div class="settings-section active" id="ai-settings">
+        <div class="setting-item">
+          <h3>AI Model</h3>
+          <p>Select which AI model to use for challenge generation</p>
+          <select id="ai-model">
+            <option value="standard">Standard (Balanced)</option>
+            <option value="creative" selected>Creative (More variety)</option>
+            <option value="competitive">Competitive (Higher difficulty)</option>
+            <option value="experimental">Experimental (Beta features)</option>
+          </select>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Learning Mode
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </h3>
+          <p>Allow AI to learn from user feedback and improve challenge quality</p>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Response Time</h3>
+          <p>Balance between speed and quality of AI responses</p>
+          <input type="range" min="1" max="5" value="3" class="range-slider" id="response-time">
+          <p>Current: <span id="response-time-value">Balanced</span></p>
+        </div>
+      </div>
+      
+      <div class="settings-section" id="challenge-gen">
+        <div class="setting-item">
+          <h3>Challenge Complexity</h3>
+          <p>Set the baseline complexity level for generated challenges</p>
+          <input type="range" min="1" max="10" value="6" class="range-slider" id="complexity">
+          <p>Current: <span id="complexity-value">6/10</span></p>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Creativity Level</h3>
+          <p>How creative and unique should challenges be</p>
+          <input type="range" min="1" max="10" value="8" class="range-slider" id="creativity">
+          <p>Current: <span id="creativity-value">8/10</span></p>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Game Genre Weighting</h3>
+          <p>Prioritize certain game genres for challenge generation</p>
+          <select id="genre-priority">
+            <option value="balanced">Balanced (All genres)</option>
+            <option value="fps" selected>FPS Priority</option>
+            <option value="strategy">Strategy Priority</option>
+            <option value="rpg">RPG Priority</option>
+            <option value="custom">Custom Weighting</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="settings-section" id="performance">
+        <div class="setting-item">
+          <h3>Processing Priority</h3>
+          <p>Allocate system resources for AI processing</p>
+          <select id="processing-priority">
+            <option value="low">Low (Save resources)</option>
+            <option value="medium">Medium</option>
+            <option value="high" selected>High (Faster processing)</option>
+            <option value="adaptive">Adaptive (Auto-adjust)</option>
+          </select>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Cache Management</h3>
+          <p>How to handle challenge caching for faster loading</p>
+          <select id="cache-management">
+            <option value="minimal">Minimal (Save space)</option>
+            <option value="balanced" selected>Balanced</option>
+            <option value="aggressive">Aggressive (Faster loading)</option>
+          </select>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Background Processing
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </h3>
+          <p>Allow AI to generate challenges in the background</p>
+        </div>
+        
+        <div class="system-info">
+          <h3>System Information</h3>
+          <p>CPU Usage: <span class="value">42%</span></p>
+          <p>Memory Usage: <span class="value">1.2 GB / 4 GB</span></p>
+          <p>Storage: <span class="value">3.7 GB Free</span></p>
+          <p>Last Maintenance: <span class="value">2 days ago</span></p>
+        </div>
+      </div>
+      
+      <div class="settings-section" id="data">
+        <div class="setting-item">
+          <h3>Challenge Database</h3>
+          <p>Manage the challenge database size and cleanup</p>
+          <select id="database-management">
+            <option value="auto">Automatic Management</option>
+            <option value="conservative" selected>Conservative (Keep more data)</option>
+            <option value="aggressive">Aggressive Cleanup</option>
+          </select>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Analytics Collection
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </h3>
+          <p>Collect anonymous usage data to improve AI performance</p>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Backup Frequency</h3>
+          <p>How often to backup system data</p>
+          <select id="backup-frequency">
+            <option value="daily">Daily</option>
+            <option value="weekly" selected>Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="manual">Manual Only</option>
+          </select>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="reset-btn">Backup Now</button>
+          <button class="danger-btn">Clear All Data</button>
+        </div>
+      </div>
+      
+      <div class="settings-section" id="advanced">
+        <div class="setting-item">
+          <h3>Developer Mode
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </h3>
+          <p>Enable advanced features and debugging tools</p>
+        </div>
+        
+        <div class="setting-item">
+          <h3>API Access
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </h3>
+          <p>Allow external applications to access the AI challenge generator</p>
+        </div>
+        
+        <div class="setting-item">
+          <h3>Custom Parameters</h3>
+          <p>Advanced AI parameters for fine-tuning (JSON format)</p>
+          <select id="parameter-preset">
+            <option value="default" selected>Default Configuration</option>
+            <option value="experimental">Experimental Configuration</option>
+            <option value="custom">Custom Configuration</option>
+          </select>
+        </div>
+        
+        <div class="setting-item">
+          <h3>System Maintenance</h3>
+          <p>Schedule automatic maintenance and optimization</p>
+          <select id="maintenance-schedule">
+            <option value="auto">Automatic (When idle)</option>
+            <option value="scheduled" selected>Scheduled (Weekly)</option>
+            <option value="manual">Manual Only</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="reset-btn">Reset to Default</button>
+        <button class="save-btn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.settings-section');
+    
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const tabId = item.getAttribute('data-tab');
+        
+        
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+        
+        
+        sections.forEach(section => section.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+    
+    
+    const responseTime = document.getElementById('response-time');
+    const responseTimeValue = document.getElementById('response-time-value');
+    responseTime.addEventListener('input', () => {
+      const value = responseTime.value;
+      let text = 'Balanced';
+      
+      if (value == 1) text = 'Fastest (Lower quality)';
+      else if (value == 2) text = 'Fast';
+      else if (value == 3) text = 'Balanced';
+      else if (value == 4) text = 'High Quality';
+      else if (value == 5) text = 'Maximum Quality (Slower)';
+      
+      responseTimeValue.textContent = text;
+    });
+    
+    const complexity = document.getElementById('complexity');
+    const complexityValue = document.getElementById('complexity-value');
+    complexity.addEventListener('input', () => {
+      complexityValue.textContent = `${complexity.value}/10`;
+    });
+    
+    const creativity = document.getElementById('creativity');
+    const creativityValue = document.getElementById('creativity-value');
+    creativity.addEventListener('input', () => {
+      creativityValue.textContent = `${creativity.value}/10`;
+    });
+    
+    
+    const saveBtn = document.querySelector('.save-btn');
+    saveBtn.addEventListener('click', () => {
+      saveBtn.textContent = 'Saved!';
+      setTimeout(() => {
+        saveBtn.textContent = 'Save Changes';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
