@@ -67,46 +67,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['screenshot'])) {
         $filepath = 'uploads/' . $filename;
         
         if (move_uploaded_file($file['tmp_name'], $filepath)) {
-            $stmt = $conn->prepare("INSERT INTO submissions (user_id, challenge_id, screenshot_path) VALUES (?, ?, ?)");
-            $stmt->bind_param("iis", $user_id, $challenge_id, $filepath);
+            $status = 'pending';
+            $feedback = 'Your submission is pending review by an admin.';
+            
+            $stmt = $conn->prepare("INSERT INTO submissions (user_id, challenge_id, screenshot_path, status, feedback) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("iisss", $user_id, $challenge_id, $filepath, $status, $feedback);
             
             if ($stmt->execute()) {
                 $submission_id = $conn->insert_id;
                 
-                $verified = (rand(1, 10) <= 7); 
-                
-                if ($verified) {
-                    $status = 'approved';
-                    $feedback = "Great job! Your screenshot shows you've successfully completed the challenge requirements.";
-                    $points_awarded = $challenge['points'];
-                    
-                    $stmt = $conn->prepare("UPDATE submissions SET status = ?, feedback = ?, points_awarded = ? WHERE id = ?");
-                    $stmt->bind_param("ssii", $status, $feedback, $points_awarded, $submission_id);
-                    $stmt->execute();
-                    
-                    $stmt = $conn->prepare("UPDATE users SET score = score + ? WHERE id = ?");
-                    $stmt->bind_param("ii", $points_awarded, $user_id);
-                    $stmt->execute();
-                    
-                    $message = "Congratulations! Your submission has been verified and you've earned {$points_awarded} points!";
-                    $messageType = 'success';
-                } else {
-                    $status = 'rejected';
-                    $reasons = [
-                        "The screenshot doesn't clearly show the completion of the challenge.",
-                        "The required elements are not visible in the screenshot.",
-                        "The game interface in the screenshot doesn't match the challenge requirements.",
-                        "The screenshot appears to be from a different game or challenge."
-                    ];
-                    $feedback = $reasons[array_rand($reasons)];
-                    
-                    $stmt = $conn->prepare("UPDATE submissions SET status = ?, feedback = ? WHERE id = ?");
-                    $stmt->bind_param("ssi", $status, $feedback, $submission_id);
-                    $stmt->execute();
-                    
-                    $message = "Your submission could not be verified: {$feedback}";
-                    $messageType = 'error';
-                }
+                $message = "Your submission has been received and is pending review by an admin. You'll be notified once it's been verified.";
+                $messageType = 'success';
                 
                 $stmt = $conn->prepare("SELECT * FROM submissions WHERE id = ?");
                 $stmt->bind_param("i", $submission_id);
@@ -219,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['screenshot'])) {
                     <h3>Submit Your Challenge</h3>
                     
                     <?php if ($message): ?>
-                    <div class="<?php echo $messageType === 'error' ? 'error-message' : 'success-message'; ?>">
+                    <div class="<?php echo $messageType === 'error' ? 'error-message' : ($messageType === 'info' ? 'info-message' : 'success-message'); ?>">
                         <?php echo $message; ?>
                     </div>
                     <?php endif; ?>
@@ -229,6 +200,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['screenshot'])) {
                         <i class="fas fa-check-circle"></i> You've already completed this challenge!
                         <p>Points earned: <?php echo number_format($submission['points_awarded']); ?></p>
                         <p>Submitted on: <?php echo date('M j, Y g:i A', strtotime($submission['created_at'])); ?></p>
+                        <?php if (!empty($submission['feedback'])): ?>
+                        <p><strong>Admin feedback:</strong> <?php echo htmlspecialchars($submission['feedback']); ?></p>
+                        <?php endif; ?>
                     </div>
                     <div class="mt-3">
                         <h4>Your Submission</h4>
@@ -262,11 +236,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['screenshot'])) {
                     <?php if ($submission && $submission['status'] === 'rejected'): ?>
                     <div class="error-message mt-3">
                         <i class="fas fa-exclamation-circle"></i> Your previous submission was rejected.
-                        <p>Feedback: <?php echo htmlspecialchars($submission['feedback']); ?></p>
+                        <?php if (!empty($submission['feedback'])): ?>
+                        <p><strong>Admin feedback:</strong> <?php echo htmlspecialchars($submission['feedback']); ?></p>
+                        <?php endif; ?>
                         <p>You can try again with a new screenshot.</p>
                     </div>
                     <div class="mt-3">
                         <h4>Your Previous Submission</h4>
+                        <img src="<?php echo htmlspecialchars($submission['screenshot_path']); ?>" alt="Your submission" class="preview-image">
+                    </div>
+                    <?php elseif ($submission && $submission['status'] === 'pending'): ?>
+                    <div class="info-message mt-3">
+                        <i class="fas fa-clock"></i> Your submission is pending admin review.
+                        <p>We'll notify you once it's been verified.</p>
+                        <?php if (!empty($submission['feedback'])): ?>
+                        <p><strong>Status:</strong> <?php echo htmlspecialchars($submission['feedback']); ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="mt-3">
+                        <h4>Your Pending Submission</h4>
                         <img src="<?php echo htmlspecialchars($submission['screenshot_path']); ?>" alt="Your submission" class="preview-image">
                     </div>
                     <?php endif; ?>
