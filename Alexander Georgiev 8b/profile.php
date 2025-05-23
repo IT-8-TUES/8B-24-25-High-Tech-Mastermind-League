@@ -1,6 +1,7 @@
 <?php
 require_once 'session_config.php';
 require_once 'config.php';
+require_once 'update_rank.php';
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.html");
@@ -10,6 +11,20 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 $player_rank = $_SESSION['player_rank'] ?? 'Rookie';
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if (isset($user['score'])) {
+    $updated_rank = updateUserRank($user_id, $user['score'], $conn);
+    if ($updated_rank !== $player_rank) {
+        $player_rank = $updated_rank;
+        $_SESSION['player_rank'] = $player_rank;
+    }
+}
 
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
