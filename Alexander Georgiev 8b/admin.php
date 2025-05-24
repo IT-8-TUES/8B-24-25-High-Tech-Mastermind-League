@@ -203,7 +203,7 @@ $recent_activity = $conn->query($recent_activity_query);
                         <a href="generate_challenge.php" class="btn btn-secondary">
                             <i class="fas fa-magic"></i> Generate Challenge
                         </a>
-                        <a href="system_settings.php" class="btn btn-secondary">
+                        <a href="systemsettings.html" class="btn btn-secondary">
                             <i class="fas fa-cog"></i> System Settings
                         </a>
                         <a href="backup_database.php" class="btn btn-secondary">
